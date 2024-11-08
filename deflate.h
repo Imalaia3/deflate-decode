@@ -34,6 +34,7 @@ public:
 private:
     void generateFixedTrees();
     void decodeBlock(HuffmanTree& literalLengthTree, HuffmanTree& distanceTree);
+    void decodeDynamicBlock();
 
     std::vector<uint8_t> m_decodedBytes;
     BitReader& m_inputStream;

@@ -28,7 +28,7 @@ void HuffmanTree::generateHuffman(HuffmanTree& dst, std::vector<uint32_t> length
     std::cout << "lengths.size() = " << lengths.size() << "\n";
     std::cout << "lowerBounds = " << lowerBounds << "\n";
     std::cout << "upperBounds = " << upperBounds << "\n";
-    std::cout << "range = " << upperBounds-lowerBounds+2 << "\n";
+    std::cout << "range = " << upperBounds-lowerBounds+1 << "\n";
 
     for (auto &&l : lengths)
     {
@@ -37,7 +37,7 @@ void HuffmanTree::generateHuffman(HuffmanTree& dst, std::vector<uint32_t> length
     std::cout << "\n";
     
 
-    assert(lengths.size() == (upperBounds-lowerBounds+2)); // +2: include lowerBounds & upperBounds
+    // assert(lengths.size() == (upperBounds-lowerBounds+1)); // +2: include lowerBounds & upperBounds
 
     uint32_t maxBitLength = 0;
     for (auto&& i : lengths) {

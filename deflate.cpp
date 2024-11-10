@@ -27,7 +27,7 @@ void DeflateDecoder::generateFixedTrees() {
         for (size_t i = 0; i < (0b11000111-0b11000000+1); i++) {
             bitLengths.push_back(8);
         }
-        HuffmanTree::generateHuffman(m_fixedLiteralLengthTree, bitLengths, 0, 285);
+        HuffmanTree::generateHuffman(m_fixedLiteralLengthTree, bitLengths, 0);
     }
     /* Distance Tree */
     // NOTE: 30-31 never occur, so don't include them
@@ -37,7 +37,7 @@ void DeflateDecoder::generateFixedTrees() {
         for (size_t i = 0; i < 31; i++) {
             bitLengths.push_back(5);
         }
-        HuffmanTree::generateHuffman(m_fixedDistanceTree, bitLengths, 0, 29);
+        HuffmanTree::generateHuffman(m_fixedDistanceTree, bitLengths, 0);
     }
 }
 
@@ -104,7 +104,7 @@ void DeflateDecoder::decodeDynamicBlock() {
     }
 
     HuffmanTree codeLengthTree;
-    HuffmanTree::generateHuffman(codeLengthTree, codeLengthLengths, 0, 18);
+    HuffmanTree::generateHuffman(codeLengthTree, codeLengthLengths, 0);
 
     // Code Lengths encoded with the codeLengthTree for the Literal/Length Tree follow.
     // After that, code lengths encoded with the codeLengthTree for the Distance Tree occurr,
@@ -160,10 +160,10 @@ void DeflateDecoder::decodeDynamicBlock() {
 
     std::cout << "Creating Literal/Length Tree...\n";
     HuffmanTree literalLengthTree;
-    HuffmanTree::generateHuffman(literalLengthTree, literalLengthCodes, 0, 28);
+    HuffmanTree::generateHuffman(literalLengthTree, literalLengthCodes, 0);
     std::cout << "Creating Distance Tree...\n";
     HuffmanTree distanceTree;
-    HuffmanTree::generateHuffman(distanceTree, distanceCodes, 0, 285);
+    HuffmanTree::generateHuffman(distanceTree, distanceCodes, 0);
 
     decodeBlock(literalLengthTree, distanceTree);
 }

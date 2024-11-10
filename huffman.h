@@ -12,7 +12,7 @@ public:
     uint16_t getValue(BitReader& reader);
     BinaryTree<uint16_t>* getTree() { return &tree; }
     
-    static void generateHuffman(HuffmanTree& dst, std::vector<uint32_t> lengths, uint32_t lowerBounds, uint32_t upperBounds);
+    static void generateHuffman(HuffmanTree& dst, std::vector<uint32_t> lengths, uint32_t startValue);
 private:
     BinaryTree<uint16_t> tree = BinaryTree<uint16_t>(0);  
 };

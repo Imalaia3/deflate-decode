@@ -1,5 +1,5 @@
 CXX=g++
-CPPFLAGS=-g -Wall -Wextra
+CPPFLAGS=-g -Wall -Wextra -Wpedantic
 
 TEST_SRCS=src/deflate/deflate.cpp src/deflate/huffman.cpp src/test.cpp
 TEST_OBJS=$(patsubst %.cpp,bin/%.o,$(TEST_SRCS))

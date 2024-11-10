@@ -11,7 +11,7 @@ void HuffmanTree::addValue(uint32_t binary, uint32_t nBits, uint16_t meaning) {
             currentNode = (currentNode->left != nullptr) ? currentNode->left : currentNode->addLeft(0);
     }
     if (!currentNode->isLeaf()) {
-        printf("Warning: Wrote %i at %li which is a non-leaf node!\n", meaning, currentNode);
+        printf("Warning: Wrote %i at %p which is a non-leaf node!\n", meaning, (void*)currentNode);
     }
     currentNode->data = meaning;
 }

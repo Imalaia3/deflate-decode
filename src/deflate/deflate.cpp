@@ -50,6 +50,7 @@ std::vector<uint8_t> DeflateDecoder::decode() {
             std::cout << "Decoding Literal Block...\n";
             uint32_t length = m_inputStream.getBytes(2);
             uint32_t notLength = m_inputStream.getBytes(2); // = ~length
+            UNUSED(notLength);
             for (size_t i = 0; i < length; i++)
                 m_decodedBytes.push_back(m_inputStream.getByte());            
         }

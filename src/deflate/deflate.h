@@ -7,6 +7,8 @@
 #define BTYPE_FIXED_HUFFMAN   1
 #define BTYPE_DYNAMIC_HUFFMAN 2
 
+#define UNUSED(x) [&x]{}() // legacy [[maybe_unused]]
+
 /* Extra Bit and Value Tables (https://datatracker.ietf.org/doc/html/rfc1951 (Page 12))*/
 
 //Lengths

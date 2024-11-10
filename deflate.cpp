@@ -77,11 +77,11 @@ void DeflateDecoder::decodeBlock(HuffmanTree& literalLengthTree, HuffmanTree& di
             uint32_t length = StartLength[symbol-257] + m_inputStream.getBits(LengthExtraBits[symbol-257]);
             uint16_t nextSymbol = distanceTree.getValue(m_inputStream); // extra bits symbol
             uint32_t distance = StartDist[nextSymbol] + m_inputStream.getBits(DistanceExtraBits[nextSymbol]);
-            std::cout << "LZW (length, distance) pair = (" << length << ", " << distance << ")\n"; 
-            
-            // Since as we push_back, the vector grows, just by indexing at -distance will do the trick.
-            for (size_t i = 0; i < length; i++)
-                m_decodedBytes.push_back(m_decodedBytes[-distance]);
+
+            // Since as we push_back, the vector grows, indexing at size()-distance will do the trick.
+            for (size_t i = 0; i < length; i++) {
+                m_decodedBytes.push_back(m_decodedBytes[m_decodedBytes.size()-distance]);
+            }
         }
         symbol = literalLengthTree.getValue(m_inputStream);
     }
@@ -101,13 +101,6 @@ void DeflateDecoder::decodeDynamicBlock() {
     std::cout << "# Code Length Codes = " << nCodeLengthCodes << "\n";
     for (size_t i = 0; i < nCodeLengthCodes; i++) {
         codeLengthLengths[lengthOrder[i]] = m_inputStream.getBits(3);
-    }
-
-    {
-        std::cout << "Code Length Lengths: ";
-        for (auto&& length : codeLengthLengths)
-            std::cout << length << ", ";
-        std::cout << "\n";
     }
 
     HuffmanTree codeLengthTree;
@@ -165,26 +158,12 @@ void DeflateDecoder::decodeDynamicBlock() {
         }
     }
 
-    // DEBUG
-    {
-        std::cout << "# Literal/Length Codes = " << nLiteralLengthCodes << "\n";
-        std::cout << "Literal/Length Lengths: ";
-        for (auto&& length : literalLengthCodes)
-            std::cout << length << ", ";
-        std::cout << "\n";
-    }
-    {
-        std::cout << "# Distance Codes = " << nDistanceCodes << "\n";
-        std::cout << "Distance Lengths: ";
-        for (auto&& length : distanceCodes)
-            std::cout << length << ", ";
-        std::cout << "\n";
-    }
+    std::cout << "Creating Literal/Length Tree...\n";
+    HuffmanTree literalLengthTree;
+    HuffmanTree::generateHuffman(literalLengthTree, literalLengthCodes, 0, 28);
+    std::cout << "Creating Distance Tree...\n";
+    HuffmanTree distanceTree;
+    HuffmanTree::generateHuffman(distanceTree, distanceCodes, 0, 285);
 
-    // std::cout << "Creating Literal/Length Tree...\n";
-    // HuffmanTree literalLengthTree;
-    // HuffmanTree::generateHuffman(literalLengthTree, literalLengthCodes, 0, ???);
-    // std::cout << "Creating Distance Tree...\n";
-    // HuffmanTree distanceTree;
-    // HuffmanTree::generateHuffman(distanceTree, distanceCodes, 0, ??);
+    decodeBlock(literalLengthTree, distanceTree);
 }

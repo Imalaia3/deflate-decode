@@ -23,20 +23,9 @@ uint16_t HuffmanTree::getValue(BitReader& reader) {
     return currentNode->data;
 }
 
-
+// Generate huffman codes with canonical prefixes and add them to a tree
 void HuffmanTree::generateHuffman(HuffmanTree& dst, std::vector<uint32_t> lengths, uint32_t lowerBounds, uint32_t upperBounds) {
-    std::cout << "lengths.size() = " << lengths.size() << "\n";
-    std::cout << "lowerBounds = " << lowerBounds << "\n";
-    std::cout << "upperBounds = " << upperBounds << "\n";
-    std::cout << "range = " << upperBounds-lowerBounds+1 << "\n";
-
-    for (auto &&l : lengths)
-    {
-        std::cout << l << " ";
-    }
-    std::cout << "\n";
-
-    // assert(lengths.size() == (upperBounds-lowerBounds+1)); // +2: include lowerBounds & upperBounds
+    
     uint32_t maxBitLength = *std::max_element(lengths.begin(), lengths.end());
 
     /* Calculate how many times each bit count occurs in the given lengths list. */

@@ -1,6 +1,6 @@
 #include <iostream>
-#include "deflate.h"
-#include "bitreader.h"
+#include "deflate/deflate.h"
+#include "deflate/bitreader.h"
 #include <cstring>
 
 struct zlibMetadata {

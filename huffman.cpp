@@ -35,28 +35,17 @@ void HuffmanTree::generateHuffman(HuffmanTree& dst, std::vector<uint32_t> length
         std::cout << l << " ";
     }
     std::cout << "\n";
-    
 
     // assert(lengths.size() == (upperBounds-lowerBounds+1)); // +2: include lowerBounds & upperBounds
-
-    uint32_t maxBitLength = 0;
-    for (auto&& i : lengths) {
-        if (i > maxBitLength)
-            maxBitLength = i;
-    }
+    uint32_t maxBitLength = *std::max_element(lengths.begin(), lengths.end());
 
     /* Calculate how many times each bit count occurs in the given lengths list. */
-    //FIXME: this can be done way faster.
-    //FIXME: a length vector can contain zeroes, which should be treated as the symbol not existing at all
-    std::vector<uint32_t> occurrences;
-    for (size_t i = 0; i < maxBitLength+1; i++) {
-        uint32_t total = 0;
-        for (auto&& length : lengths) {
-            if (length == i && length != 0 )
-                total++;
+    // NOTE: Add 1 on maxBitLength so 0 is included
+    std::vector<uint32_t> occurrences(maxBitLength+1, 0);
+    for (auto &&l : lengths) {
+        if (l != 0) {
+            occurrences[l]++;
         }
-        std::cout << "Occurance " << i << ' ' << total << "\n";
-        occurrences.push_back(total);
     }
     
     /* Calculate The value of each bitcount so that they are unique
@@ -67,18 +56,16 @@ void HuffmanTree::generateHuffman(HuffmanTree& dst, std::vector<uint32_t> length
     for (size_t i = 0; i < maxBitLength+1; i++) {
         uint32_t lastBase = (i == 0) ? 0 : codeBases[i-1]; // Base of last bit length
         uint32_t lastContained = (i == 0) ? 0 : occurrences[i-1]; // how many times was the last base used
-        std::cout << "Code Base " << i << ' ' << (lastBase+lastContained)*2 << "\n";
-        codeBases.push_back((lastBase+lastContained)*2); // shifted left by one so we get a different prefix
+        codeBases.push_back((lastBase+lastContained)<<1); // shifted left by one so we get a different prefix
     }
 
-    std::vector<uint32_t> deltas(maxBitLength, 0);
+    // FIXME: creating a whole vector for this is pretty unoptimized
+    std::vector<uint32_t> deltas(maxBitLength+1, 0);
     for (size_t i = 0; i < lengths.size(); i++) {
         auto length = lengths[i];
         if (length != 0) {
-            auto base = codeBases[length];
-            dst.addValue(base+deltas[length], length, lowerBounds+i);
-            deltas[length] += 1;
+            dst.addValue(codeBases[length]+deltas[length], length, lowerBounds+i);
+            deltas[length]++;
         }
     }
-        
 }

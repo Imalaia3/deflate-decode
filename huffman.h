@@ -2,6 +2,7 @@
 #include "bitreader.h"
 #include "binary_tree.h"
 #include <vector>
+#include <algorithm> // for std::max_element
 
 class HuffmanTree {
 public:
